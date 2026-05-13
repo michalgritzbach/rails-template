@@ -1,0 +1,274 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-app-bg:      var(--app-bg);
+  --color-app-bg2:     var(--app-bg2);
+  --color-app-surface: var(--app-surface);
+  --color-app-border:  var(--app-border);
+  --color-app-text:    var(--app-text);
+  --color-app-text2:   var(--app-text2);
+  --color-app-accent:  var(--app-accent);
+  --color-app-accent2: var(--app-accent2);
+}
+
+@theme {
+  /* Replace with your chosen font and add a Google Fonts link to the layout */
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --radius-app: 12px;
+}
+
+@layer base {
+  :root {
+    --app-bg:      oklch(96% 0.01 240);
+    --app-bg2:     oklch(91% 0.02 240);
+    --app-surface: oklch(99.5% 0.004 240);
+    --app-border:  oklch(87% 0.04 240);
+    --app-text:    oklch(18% 0.03 240);
+    --app-text2:   oklch(46% 0.07 240);
+    --app-accent:  oklch(52% 0.22 260);
+    --app-accent2: oklch(68% 0.22 180);
+  }
+
+  html.dark {
+    --app-bg:      oklch(14% 0.03 240);
+    --app-bg2:     oklch(20% 0.05 240);
+    --app-surface: oklch(18% 0.04 240);
+    --app-border:  oklch(30% 0.07 240);
+    --app-text:    oklch(93% 0.015 240);
+    --app-text2:   oklch(62% 0.08 240);
+    --app-accent:  oklch(65% 0.22 260);
+    --app-accent2: oklch(72% 0.22 180);
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    background: var(--app-bg);
+    color: var(--app-text);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  /* ── Buttons ── */
+  .app-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: inherit;
+    text-decoration: none;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+    line-height: 1;
+
+    &:hover { opacity: 0.85; }
+  }
+  .app-btn--md  { font-size: 14px; padding: 10px 20px; }
+  .app-btn--sm  { font-size: 13px; padding: 6px 14px; }
+  .app-btn--primary {
+    background: var(--app-accent);
+    color: white;
+  }
+  .app-btn--secondary {
+    background: var(--app-bg2);
+    color: var(--app-text);
+    border: 1px solid var(--app-border);
+  }
+  .app-btn--ghost {
+    background: transparent;
+    color: var(--app-text2);
+  }
+  .app-btn--danger {
+    background: oklch(55% 0.18 25);
+    color: white;
+  }
+
+  /* ── Card ── */
+  .app-card {
+    background: var(--app-surface);
+    border: 1px solid var(--app-border);
+    border-radius: var(--radius-app);
+    padding: 20px;
+  }
+
+  /* ── Badge ── */
+  .app-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+  }
+  .app-badge--accent {
+    background: color-mix(in oklch, var(--app-accent) 12%, transparent);
+    color: var(--app-accent);
+  }
+
+  /* ── Section heading ── */
+  .app-section-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--app-text2);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin: 0;
+  }
+
+  /* ── Nav ── */
+  .app-nav {
+    background: var(--app-surface);
+    border-bottom: 1px solid var(--app-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    height: 58px;
+  }
+  .app-nav-link {
+    position: relative;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--app-text2);
+    transition: background 0.12s;
+
+    &:hover { background: var(--app-bg2); }
+  }
+  .app-nav-link--active {
+    background: color-mix(in oklch, var(--app-accent) 12%, transparent);
+    color: var(--app-accent);
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -11px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 24px;
+      height: 3px;
+      border-radius: 99px;
+      background: var(--app-accent);
+    }
+  }
+
+  /* ── Tabs ── */
+  .app-tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--app-bg2);
+    border-radius: 10px;
+    padding: 4px;
+  }
+  .app-tab {
+    flex: 1;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+    background: transparent;
+    color: var(--app-text2);
+    box-shadow: none;
+  }
+  .app-tab--active {
+    background: var(--app-surface);
+    color: var(--app-accent);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  }
+
+  /* ── Modal ── */
+  @keyframes app-fade-in  { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes app-fade-out { from { opacity: 1; } to { opacity: 0; } }
+  @keyframes app-slide-up {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+  }
+  @keyframes app-slide-down {
+    from { opacity: 1; transform: translateY(0)    scale(1);    }
+    to   { opacity: 0; transform: translateY(20px) scale(0.97); }
+  }
+
+  .app-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(3px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: app-fade-in 0.2s ease;
+    &.is-closing { animation: app-fade-out 0.18s ease forwards; }
+  }
+  .app-modal {
+    background: var(--app-surface);
+    border-radius: var(--radius-app);
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+    animation: app-slide-up 0.22s cubic-bezier(0.34, 1.2, 0.64, 1);
+    &.is-closing { animation: app-slide-down 0.18s ease forwards; }
+  }
+  .app-modal__header {
+    padding: 24px 24px 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .app-modal__body  { padding: 20px 24px 24px; }
+  .app-modal__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--app-text2);
+    font-size: 22px;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    &:hover { background: var(--app-bg2); color: var(--app-text); }
+  }
+}
+
+/* ── Hotwire Native: tighter padding on small screens ── */
+body.turbo-native .px-10 { padding-left: 1rem; padding-right: 1rem; }
+body.turbo-native .p-10  { padding: 1.25rem 1rem; }
+body.turbo-native .py-8,
+body.turbo-native .py-7  { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+body.turbo-native .pt-7  { padding-top: 1.25rem; }
+body.turbo-native .pb-8  { padding-bottom: 1.25rem; }
+body.turbo-native [style*="max-width"] { max-width: 100% !important; }
+
+@media print {
+  body {
+    background: white;
+    color: #000;
+    font-size: 11pt;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}

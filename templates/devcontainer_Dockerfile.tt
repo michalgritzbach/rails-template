@@ -1,0 +1,4 @@
+ARG RUBY_VERSION=<%= RUBY_VERSION %>
+FROM ghcr.io/rails/devcontainer/images/ruby:$RUBY_VERSION
+
+ENV BINDING="0.0.0.0"

@@ -1,0 +1,15 @@
+name: "<%= app_name.dasherize %>"
+
+services:
+  rails-app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+
+    volumes:
+    - ..:/workspaces/<%= app_name %>:cached
+
+    command: sleep infinity
+
+    ports:
+      - "3000:3000"

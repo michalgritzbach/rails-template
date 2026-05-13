@@ -1,76 +1,77 @@
-# Rails Template
+# rails-template
 
-Rails 8.1 starter with the full opinionated stack. Clone, rename, build.
+Rails 8.1 application template. Generates a new app with the full opinionated stack in one command.
 
 ## Stack
 
 - **Ruby** 4.0.3 · **Rails** 8.1
 - **Frontend** Hotwire (Turbo + Stimulus) · Tailwind CSS v4 · Importmap · Propshaft
 - **Database** SQLite + Solid Cache/Queue/Cable
-- **Auth** — not included; add `has_secure_password` + sessions as needed
 - **Testing** RSpec · FactoryBot · Shoulda Matchers · DatabaseCleaner · Guard
-- **Quality** Rubocop (omakase) · Brakeman · Bundler-audit
+- **Quality** Rubocop omakase · Brakeman · Bundler-audit
 - **Deployment** Kamal + Docker + Thruster
 - **Dev** OrbStack devcontainer
 
-## Getting started
+## Usage
 
 ```bash
-# 1. Clone and rename
-git clone <this repo> myapp
-cd myapp
-
-# 2. Rename the module in config/application.rb
-#    Change `module App` → `module Myapp`
-
-# 3. Update config/deploy.yml: service, image, server IPs
-
-# 4. Update .devcontainer/compose.yaml: add your OrbStack host to development.rb
-
-# 5. Open in devcontainer
-devcontainer open .
-
-# 6. Inside container
-bin/rails db:create db:migrate
-bin/dev
+rails new myapp \
+  -d sqlite3 \
+  --asset-pipeline=propshaft \
+  --javascript=importmap \
+  --skip-test \
+  --template=/path/to/rails-template/template.rb
 ```
 
-## Conventions
+Or clone this repo and reference it:
+
+```bash
+git clone git@github.com:you/rails-template.git ~/code/rails-template
+
+rails new myapp -d sqlite3 --asset-pipeline=propshaft --javascript=importmap \
+  --skip-test --template=~/code/rails-template/template.rb
+```
+
+## What gets generated
+
+- `app/views/layouts/application.html.slim` — Slim layout with Hotwire Native body class + modal turbo-frame
+- `app/views/shared/_nav.html.slim` — nav stub (hidden on native)
+- `app/assets/tailwind/application.css` — design token system (`--app-*`), core components, Hotwire Native overrides
+- `app/javascript/controllers/modal_controller.js` — Turbo Frame modal with backdrop + Escape
+- `app/controllers/application_controller.rb` — includes `Turbo::Native::Navigation`
+- `spec/` — RSpec skeleton with FactoryBot, DatabaseCleaner, Shoulda Matchers wired up
+- `.devcontainer/` — OrbStack-ready devcontainer
+
+## Conventions generated apps should follow
 
 - Slim views. No ERB.
 - `t()` for all user-facing strings. Keys sorted alphabetically in `en.yml`.
 - Array path syntax (`[@record]`, `[:edit, @record]`) — never named route helpers.
-- `content_for :title` on every view for native OS nav bar titles.
-- `recede_or_redirect_to` instead of `redirect_to` on mutating actions (pops native screen, redirects on web).
-- `:unprocessable_content` (not `:unprocessable_entity`) in controllers.
-- `@pet = Resource.find(params[:resource_id]) if params[:resource_id]` for nested+top-level routes.
+- `content_for :title` on every view (used for native OS nav bar title).
+- `recede_or_redirect_to` on mutating actions (pops native screen, normal redirect on web).
+- `:unprocessable_content` in controllers and specs.
 
 ## Design tokens
 
-Edit `app/assets/tailwind/application.css` → `:root` block. Tokens use `--app-*` prefix; Tailwind exposes them as `text-app-accent`, `bg-app-surface`, etc.
-
-## Hotwire Native
-
-Body gets `class="turbo-native"` when a native app is detected. Use `body.turbo-native` selectors for native-specific overrides (see bottom of `application.css`). Nav is hidden on native — the OS provides its own chrome.
+Edit the `:root` block in `app/assets/tailwind/application.css`. Tokens are exposed to Tailwind as `bg-app-surface`, `text-app-accent`, etc. Dark mode uses `html.dark`.
 
 ## Modal pattern
 
-All CRUD forms open as modals via a single `turbo_frame_tag "modal"` in the layout.
+```slim
+/ Trigger link
+= link_to "New thing", new_thing_path, data: { turbo_frame: "modal" }
 
-- New/edit views: wrap content in `= turbo_frame_tag "modal"` with `.app-modal-overlay` / `.app-modal`
-- Trigger links: `data: { turbo_frame: "modal" }`
-- Form submit: `data: { turbo_frame: "_top" }`
-- Cancel links: `data: { turbo_frame: "_top" }`
-- Backdrop/escape: `modal` Stimulus controller (already included)
-
-## Dev commands
-
-```bash
-bin/devcontainer bin/dev              # server + Tailwind watcher
-bin/devcontainer bin/rails console
-bin/devcontainer bin/rails db:migrate
-bin/devcontainer bundle exec rspec
-bin/devcontainer bin/rubocop
-bin/devcontainer bin/brakeman
-bin/devcontainer bundle exec bundler-audit
+/ new.html.slim
+= turbo_frame_tag "modal"
+  .app-modal-overlay data-controller="modal" data-action="click->modal#backdropClick"
+    .app-modal
+      .app-modal__header
+        h2 New thing
+        button.app-modal__close data-action="click->modal#close" ×
+      .app-modal__body
+        = form_with ... data: { turbo_frame: "_top" }
 ```
+
+## Updating the template
+
+Edit files in `templates/` and `template.rb`. Files ending in `.tt` are ERB — use `<%= app_name %>` etc. for substitution. No Rails app files live in this repo.

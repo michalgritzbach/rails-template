@@ -1,0 +1,17 @@
+{
+  "name": "<%= app_name.humanize %>",
+  "dockerComposeFile": "compose.yaml",
+  "service": "rails-app",
+  "workspaceFolder": "/workspaces/<%= app_name %>",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/rails/devcontainer/features/activestorage": {},
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": { "moby": false },
+    "ghcr.io/rails/devcontainer/features/sqlite3": {}
+  },
+  "containerEnv": {
+    "KAMAL_REGISTRY_PASSWORD": "$KAMAL_REGISTRY_PASSWORD"
+  },
+  "forwardPorts": [3000],
+  "postCreateCommand": "bin/setup --skip-server"
+}
