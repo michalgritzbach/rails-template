@@ -1,0 +1,15 @@
+name: "app"
+
+services:
+  rails-app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+
+    volumes:
+    - ..:/workspaces/${localWorkspaceFolderBasename}:cached
+
+    command: sleep infinity
+
+    ports:
+      - "3000:3000"
