@@ -1,8 +1,8 @@
 # Rails 8.1 Template
 #
-# Usage:
+# Usage (must be `rails new`, not `app:template` — file setup runs in after_bundle):
 #   rails new myapp -d sqlite3 --asset-pipeline=propshaft --javascript=importmap \
-#     --skip-test --template=/path/to/rails-template/template.rb
+#     --skip-test --devcontainer --template=/path/to/rails-template/template.rb
 #
 # Produces: Hotwire, Tailwind CSS v4, Slim, RSpec, devcontainer (OrbStack), Kamal.
 
@@ -11,22 +11,22 @@ def source_paths
 end
 
 # ── Gems ──────────────────────────────────────────────────────────────────────
+#
+# NOTE: image_processing, brakeman, bundler-audit and rubocop-rails-omakase ship
+# in the default Rails 8.1 Gemfile. Do NOT re-declare them here — bundle emits
+# "listed more than once" warnings for duplicate entries.
 
-gem "image_processing", "~> 1.2"
 gem "simple_form"
 gem "slim-rails"
 gem "tailwindcss-rails"
 
 gem_group :development, :test do
-  gem "brakeman",                  require: false
-  gem "bundler-audit",             require: false
   gem "database_cleaner-active_record"
   gem "factory_bot_rails"
   gem "faker"
   gem "guard"
   gem "guard-rspec",               require: false
   gem "rspec-rails"
-  gem "rubocop-rails-omakase",     require: false
   gem "shoulda-matchers"
 end
 

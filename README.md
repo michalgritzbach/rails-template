@@ -4,7 +4,7 @@ Rails 8.1 application template. Generates a new app with the full opinionated st
 
 ## Stack
 
-- **Ruby** 4.0.3 · **Rails** 8.1
+- **Ruby** 4.0.5 · **Rails** 8.1
 - **Frontend** Hotwire (Turbo + Stimulus) · Tailwind CSS v4 · Importmap · Propshaft
 - **Database** SQLite + Solid Cache/Queue/Cable
 - **Testing** RSpec · FactoryBot · Shoulda Matchers · DatabaseCleaner · Guard
@@ -20,6 +20,7 @@ rails new myapp \
   --asset-pipeline=propshaft \
   --javascript=importmap \
   --skip-test \
+  --devcontainer \
   --template=/path/to/rails-template/template.rb
 ```
 
@@ -29,8 +30,14 @@ Or clone this repo and reference it:
 git clone git@github.com:you/rails-template.git ~/code/rails-template
 
 rails new myapp -d sqlite3 --asset-pipeline=propshaft --javascript=importmap \
-  --skip-test --template=~/code/rails-template/template.rb
+  --skip-test --devcontainer --template=~/code/rails-template/template.rb
 ```
+
+> **Must be run via `rails new`, not `bin/rails app:template`.** All file
+> scaffolding (Slim layouts, RSpec skeleton, Tailwind tokens, etc.) runs in an
+> `after_bundle` hook, which only fires during `rails new`. Applying the template
+> to an existing app adds the gems to the Gemfile but skips every install and
+> generator step.
 
 ## What gets generated
 
